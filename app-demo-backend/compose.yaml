@@ -1,0 +1,10 @@
+services:
+  mysql:
+    image: 'mysql:8.4.7'
+    environment:
+      - 'MYSQL_DATABASE=login-app'
+      - 'MYSQL_ROOT_PASSWORD=admin123'
+      - 'MYSQL_USER=myuser'
+      - 'MYSQL_PASSWORD=admin123'
+    ports:
+      - '3309:3306'
