@@ -9,7 +9,6 @@ import io.jsonwebtoken.Jwts;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import java.util.Base64;
 import java.util.Date;
 import java.util.Map;
 import java.util.function.Function;
@@ -23,7 +22,7 @@ public class JWTUtils {
       @Value("${jwt.expiration-ms:3600000}") long expirationMs,
       @Value("${jwt.secret}") String cadenaSecreta) {
     this.expirationMs = expirationMs;
-    byte[] keyBytes = Base64.getDecoder().decode(cadenaSecreta);
+    byte[] keyBytes = cadenaSecreta.getBytes(java.nio.charset.StandardCharsets.UTF_8);
     this.secretKey = new SecretKeySpec(keyBytes, "HmacSHA256");
   }
 
