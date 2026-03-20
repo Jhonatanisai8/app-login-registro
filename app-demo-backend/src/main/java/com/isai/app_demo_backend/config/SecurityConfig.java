@@ -33,6 +33,7 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http.csrf(csrf -> csrf.disable())
+        .cors(org.springframework.security.config.Customizer.withDefaults())
         .authorizeHttpRequests(request -> request.requestMatchers("/api/v1/auth/**").permitAll())
         .authorizeHttpRequests(request -> request.requestMatchers("/api/v1/public/**").permitAll()
             .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
