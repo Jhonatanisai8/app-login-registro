@@ -17,8 +17,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class UserManagementServiceIMPL
-    implements UserManagementService {
+public class UserManagementServiceIMPL implements UserManagementService {
 
   private final UsuarioEntidadRepositorio usuarioEntidadRepositorio;
   private final JWTUtils utils;
@@ -52,11 +51,8 @@ public class UserManagementServiceIMPL
   public ReqRes login(ReqRes loginRequest) {
     ReqRes response = new ReqRes();
     try {
-      authenticationManager.authenticate(
-          new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
-      );
-      var usuario = usuarioEntidadRepositorio.findByEmail(loginRequest.getEmail())
-          .orElseThrow(() -> new Exception("Usuario no encontrado"));
+      authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+      var usuario = usuarioEntidadRepositorio.findByEmail(loginRequest.getEmail()).orElseThrow(() -> new Exception("Usuario no encontrado"));
       var jwtToken = utils.generarToken(usuario);
       var refreshToken = utils.generarRefreshToken(new HashMap<>(), usuario);
       response.setToken(jwtToken);
@@ -74,8 +70,7 @@ public class UserManagementServiceIMPL
     ReqRes response = new ReqRes();
     try {
       String email = utils.extraerNombreUsuario(refreshToken.getEmail());
-      UsuarioEntidad usuario = usuarioEntidadRepositorio.findByEmail(email)
-          .orElseThrow(() -> new Exception("Usuario no encontrado"));
+      UsuarioEntidad usuario = usuarioEntidadRepositorio.findByEmail(email).orElseThrow(() -> new Exception("Usuario no encontrado"));
       if (utils.esTokenValido(refreshToken.getRefreshToken(), usuario)) {
         var jwtToken = utils.generarToken(usuario);
         response.setCodigoEstado(200);
@@ -118,8 +113,7 @@ public class UserManagementServiceIMPL
   public ReqRes obtenerUsuarioID(Long usuarioIDRequest) {
     ReqRes response = new ReqRes();
     try {
-      UsuarioEntidad usuario = usuarioEntidadRepositorio.findById(usuarioIDRequest)
-          .orElseThrow(() -> new Exception("Usuario no encontrado"));
+      UsuarioEntidad usuario = usuarioEntidadRepositorio.findById(usuarioIDRequest).orElseThrow(() -> new Exception("Usuario no encontrado"));
       response.setUsuario(usuario);
       response.setCodigoEstado(200);
       response.setMensaje("Usuario" + usuarioIDRequest + " obtenido exitosamente");
@@ -146,6 +140,35 @@ public class UserManagementServiceIMPL
     } catch (Exception e) {
       response.setCodigoEstado(500);
       response.setError("Error al eliminar el usuario: " + e.getMessage());
+    }
+    return response;
+  }
+
+  @Override
+  public ReqRes actualizarUsuarioID(Long usuarioIDRequest, ReqRes actualizarUsuarioRequest) {
+    ReqRes response = new ReqRes();
+    try {
+      Optional<UsuarioEntidad> usuarioOptional = usuarioEntidadRepositorio.findById(usuarioIDRequest);
+      if (usuarioOptional.isPresent()) {
+        UsuarioEntidad usuarioExistente = usuarioOptional.get();
+        usuarioExistente.setEmail(actualizarUsuarioRequest.getEmail());
+        usuarioExistente.setCiudad(actualizarUsuarioRequest.getCiudad());
+        usuarioExistente.setNombre(actualizarUsuarioRequest.getNombre());
+        usuarioExistente.setRol(actualizarUsuarioRequest.getRol());
+        if (actualizarUsuarioRequest.getPassword() != null && !actualizarUsuarioRequest.getPassword().isEmpty()) {
+          usuarioExistente.setPassword(passwordEncoder.encode(actualizarUsuarioRequest.getPassword()));
+        }
+        UsuarioEntidad usuarioActualizado = usuarioEntidadRepositorio.save(usuarioExistente);
+        response.setUsuario(usuarioActualizado);
+        response.setCodigoEstado(200);
+        response.setMensaje("Usuario " + usuarioIDRequest + " actualizado exitosamente");
+      } else {
+        response.setCodigoEstado(404);
+        response.setError("Usuario " + usuarioIDRequest + " no encontrado");
+      }
+    } catch (Exception e) {
+      response.setCodigoEstado(500);
+      response.setError("Error al actualizar el usuario: " + e.getMessage());
     }
     return response;
   }
