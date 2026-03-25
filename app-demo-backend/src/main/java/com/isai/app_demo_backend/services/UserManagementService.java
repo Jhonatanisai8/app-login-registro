@@ -4,4 +4,6 @@ import com.isai.app_demo_backend.dtos.ReqRes;
 
 public interface UserManagementService {
   ReqRes registrar(ReqRes registrarRequest);
+
+  ReqRes login(ReqRes loginRequest);
 }

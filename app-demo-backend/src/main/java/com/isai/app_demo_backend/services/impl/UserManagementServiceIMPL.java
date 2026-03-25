@@ -7,8 +7,11 @@ import com.isai.app_demo_backend.services.UserManagementService;
 import com.isai.app_demo_backend.services.jwt.JWTUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
 
 @Service
 @RequiredArgsConstructor
@@ -42,4 +45,27 @@ public class UserManagementServiceIMPL
     }
     return resp;
   }
+
+  @Override
+  public ReqRes login(ReqRes loginRequest) {
+    ReqRes response = new ReqRes();
+    try {
+      authenticationManager.authenticate(
+          new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
+      );
+      var usuario = usuarioEntidadRepositorio.findByEmail(loginRequest.getEmail())
+          .orElseThrow(() -> new Exception("Usuario no encontrado"));
+      var jwtToken = utils.generarToken(usuario);
+      var refreshToken = utils.generarRefreshToken(new HashMap<>(), usuario);
+      response.setToken(jwtToken);
+      response.setRefreshToken(refreshToken);
+      response.setHoraDeVencimiento("24Hrs");
+      response.setMensaje("Login exitoso");
+    } catch (Exception e) {
+      response.setCodigoEstado(500);
+      response.setError("Error al autenticar el usuario: " + e.getMessage());
+    }
+    return response;
+  }
 }
+
