@@ -8,4 +8,6 @@ public interface UserManagementService {
   ReqRes login(ReqRes loginRequest);
 
   ReqRes refreshToken(ReqRes refreshTokenRequest);
+
+  ReqRes obtenerUsuarios();
 }

@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -87,6 +88,27 @@ public class UserManagementServiceIMPL
     } catch (Exception e) {
       response.setCodigoEstado(500);
       response.setError("Error al refrescar el token: " + e.getMessage());
+      return response;
+    }
+  }
+
+  @Override
+  public ReqRes obtenerUsuarios() {
+    ReqRes response = new ReqRes();
+    try {
+      List<UsuarioEntidad> usuarioEntidadList = usuarioEntidadRepositorio.findAll();
+      if (!usuarioEntidadList.isEmpty()) {
+        response.setListaUsuarios(usuarioEntidadList);
+        response.setCodigoEstado(200);
+        response.setMensaje("Usuarios obtenidos exitosamente");
+      } else {
+        response.setCodigoEstado(404);
+        response.setError("No se encontraron usuarios");
+      }
+      return response;
+    } catch (Exception e) {
+      response.setCodigoEstado(500);
+      response.setError("Error al obtener los usuarios: " + e.getMessage());
       return response;
     }
   }
