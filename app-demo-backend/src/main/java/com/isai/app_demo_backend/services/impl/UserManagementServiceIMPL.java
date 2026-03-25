@@ -11,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -169,6 +170,26 @@ public class UserManagementServiceIMPL implements UserManagementService {
     } catch (Exception e) {
       response.setCodigoEstado(500);
       response.setError("Error al actualizar el usuario: " + e.getMessage());
+    }
+    return response;
+  }
+
+  @Override
+  public ReqRes obtenerInformacionUsuarioPorEmail(String emailRequest) {
+    ReqRes response = new ReqRes();
+    try {
+      Optional<UsuarioEntidad> usuarioOptional = usuarioEntidadRepositorio.findByEmail(emailRequest);
+      if (usuarioOptional.isPresent()) {
+        response.setUsuario(usuarioOptional.get());
+        response.setCodigoEstado(200);
+        response.setMensaje("Información del usuario obtenida exitosamente");
+      } else {
+        response.setCodigoEstado(404);
+        response.setError("Usuario con email " + emailRequest + " no encontrado");
+      }
+    } catch (Exception e) {
+      response.setCodigoEstado(500);
+      response.setError("Error al obtener la información del usuario: " + e.getMessage());
     }
     return response;
   }

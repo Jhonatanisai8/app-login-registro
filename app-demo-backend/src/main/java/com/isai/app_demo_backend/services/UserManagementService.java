@@ -16,4 +16,6 @@ public interface UserManagementService {
   ReqRes eliminarUsuarioID(Long usuarioIDRequest);
 
   ReqRes actualizarUsuarioID(Long usuarioIDRequest, ReqRes actualizarUsuarioRequest);
+
+  ReqRes obtenerInformacionUsuarioPorEmail(String emailRequest);
 }
