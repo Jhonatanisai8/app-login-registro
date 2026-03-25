@@ -67,5 +67,28 @@ public class UserManagementServiceIMPL
     }
     return response;
   }
+
+  public ReqRes refreshToken(ReqRes refreshToken) {
+    ReqRes response = new ReqRes();
+    try {
+      String email = utils.extraerNombreUsuario(refreshToken.getEmail());
+      UsuarioEntidad usuario = usuarioEntidadRepositorio.findByEmail(email)
+          .orElseThrow(() -> new Exception("Usuario no encontrado"));
+      if (utils.esTokenValido(refreshToken.getRefreshToken(), usuario)) {
+        var jwtToken = utils.generarToken(usuario);
+        response.setCodigoEstado(200);
+        response.setToken(jwtToken);
+        response.setRefreshToken(refreshToken.getToken());
+        response.setHoraDeVencimiento("24Hrs");
+        response.setMensaje("Token refrescado exitosamente");
+      }
+      response.setCodigoEstado(200);
+      return response;
+    } catch (Exception e) {
+      response.setCodigoEstado(500);
+      response.setError("Error al refrescar el token: " + e.getMessage());
+      return response;
+    }
+  }
 }
 

@@ -6,4 +6,6 @@ public interface UserManagementService {
   ReqRes registrar(ReqRes registrarRequest);
 
   ReqRes login(ReqRes loginRequest);
+
+  ReqRes refreshToken(ReqRes refreshTokenRequest);
 }
