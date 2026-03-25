@@ -19,4 +19,9 @@ public class UsuarioController {
   public ResponseEntity<ReqRes> registrar(@RequestBody ReqRes registrarRequest) {
     return ResponseEntity.ok(userManagementService.registrar(registrarRequest));
   }
+
+  @RequestMapping(method = RequestMethod.GET)
+  public ResponseEntity<ReqRes> obtenerUsuarios() {
+    return ResponseEntity.ok(userManagementService.obtenerUsuarios());
+  }
 }
