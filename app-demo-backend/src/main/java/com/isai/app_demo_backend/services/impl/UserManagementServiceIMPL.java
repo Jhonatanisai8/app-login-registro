@@ -112,5 +112,21 @@ public class UserManagementServiceIMPL
       return response;
     }
   }
+
+  @Override
+  public ReqRes obtenerUsuarioID(Long usuarioIDRequest) {
+    ReqRes response = new ReqRes();
+    try {
+      UsuarioEntidad usuario = usuarioEntidadRepositorio.findById(usuarioIDRequest)
+          .orElseThrow(() -> new Exception("Usuario no encontrado"));
+      response.setUsuario(usuario);
+      response.setCodigoEstado(200);
+      response.setMensaje("Usuario" + usuarioIDRequest + " obtenido exitosamente");
+    } catch (Exception e) {
+      response.setCodigoEstado(500);
+      response.setError("Error al obtener el usuario: " + e.getMessage());
+    }
+    return response;
+  }
 }
 

@@ -10,4 +10,6 @@ public interface UserManagementService {
   ReqRes refreshToken(ReqRes refreshTokenRequest);
 
   ReqRes obtenerUsuarios();
+
+  ReqRes obtenerUsuarioID(Long usuarioIDRequest);
 }
