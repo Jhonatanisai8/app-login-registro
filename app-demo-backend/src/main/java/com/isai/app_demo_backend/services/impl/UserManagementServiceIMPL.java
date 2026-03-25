@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -125,6 +126,26 @@ public class UserManagementServiceIMPL
     } catch (Exception e) {
       response.setCodigoEstado(500);
       response.setError("Error al obtener el usuario: " + e.getMessage());
+    }
+    return response;
+  }
+
+  @Override
+  public ReqRes eliminarUsuarioID(Long usuarioIDRequest) {
+    ReqRes response = new ReqRes();
+    try {
+      Optional<UsuarioEntidad> usuarioOptional = usuarioEntidadRepositorio.findById(usuarioIDRequest);
+      if (usuarioOptional.isPresent()) {
+        usuarioEntidadRepositorio.deleteById(usuarioIDRequest);
+        response.setCodigoEstado(200);
+        response.setMensaje("Usuario " + usuarioIDRequest + " eliminado exitosamente");
+      } else {
+        response.setCodigoEstado(404);
+        response.setError("Usuario " + usuarioIDRequest + " no encontrado");
+      }
+    } catch (Exception e) {
+      response.setCodigoEstado(500);
+      response.setError("Error al eliminar el usuario: " + e.getMessage());
     }
     return response;
   }
