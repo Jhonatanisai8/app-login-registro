@@ -19,4 +19,9 @@ public class AuthController {
   public ResponseEntity<ReqRes> login(@RequestBody ReqRes loginRequest) {
     return ResponseEntity.ok(userManagementService.login(loginRequest));
   }
+
+  @RequestMapping(path = "/refresh-token", method = RequestMethod.POST)
+  public ResponseEntity<ReqRes> refreshToken(@RequestBody ReqRes refreshTokenRequest) {
+    return ResponseEntity.ok(userManagementService.refreshToken(refreshTokenRequest));
+  }
 }
