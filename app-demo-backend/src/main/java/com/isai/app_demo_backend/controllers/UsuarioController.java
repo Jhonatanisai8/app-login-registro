@@ -26,4 +26,9 @@ public class UsuarioController {
   public ResponseEntity<ReqRes> obtenerUsuario(@PathVariable Long idUsuario) {
     return ResponseEntity.ok(userManagementService.obtenerUsuarioID(idUsuario));
   }
+
+  @RequestMapping(path = "/admin/usuarios{idUsuario}", method = RequestMethod.PUT)
+  public ResponseEntity<ReqRes> actualizarUsuario(@PathVariable Long idUsuario, @RequestBody ReqRes actualizarUsuarioRequest) {
+    return ResponseEntity.ok(userManagementService.actualizarUsuarioID(idUsuario, actualizarUsuarioRequest));
+  }
 }
