@@ -34,11 +34,16 @@ public class UsuarioController {
     return ResponseEntity.ok(userManagementService.actualizarUsuarioID(idUsuario, actualizarUsuarioRequest));
   }
 
-  @RequestMapping(path = "/adminuser/obtener-perfil", method = RequestMethod.PUT)
+  @RequestMapping(path = "/adminuser/obtener-perfil", method = RequestMethod.GET)
   public ResponseEntity<ReqRes> obtenerPerfil() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     String email = authentication.getName();
     ReqRes response = userManagementService.obtenerInformacionUsuarioPorEmail(email);
     return ResponseEntity.status(response.getCodigoEstado()).body(response);
+  }
+
+  @RequestMapping(path = "/admin/usuarios{idUsuario}", method = RequestMethod.DELETE)
+  public ResponseEntity<ReqRes> eliminarUsuario(@PathVariable Long idUsuario) {
+    return ResponseEntity.ok(userManagementService.eliminarUsuarioID(idUsuario));
   }
 }
