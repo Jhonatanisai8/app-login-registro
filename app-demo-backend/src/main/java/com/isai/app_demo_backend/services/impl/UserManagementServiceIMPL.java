@@ -6,18 +6,20 @@ import com.isai.app_demo_backend.repositorys.UsuarioEntidadRepositorio;
 import com.isai.app_demo_backend.services.UserManagementService;
 import com.isai.app_demo_backend.services.jwt.JWTUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserManagementServiceIMPL implements UserManagementService {
 
   private final UsuarioEntidadRepositorio usuarioEntidadRepositorio;
@@ -56,6 +58,7 @@ public class UserManagementServiceIMPL implements UserManagementService {
       var usuario = usuarioEntidadRepositorio.findByEmail(loginRequest.getEmail()).orElseThrow(() -> new Exception("Usuario no encontrado"));
       var jwtToken = utils.generarToken(usuario);
       var refreshToken = utils.generarRefreshToken(new HashMap<>(), usuario);
+      response.setCodigoEstado(200);
       response.setToken(jwtToken);
       response.setRefreshToken(refreshToken);
       response.setHoraDeVencimiento("24Hrs");

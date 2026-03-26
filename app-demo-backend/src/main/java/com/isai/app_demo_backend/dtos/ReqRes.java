@@ -1,5 +1,6 @@
 package com.isai.app_demo_backend.dtos;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.isai.app_demo_backend.entitys.UsuarioEntidad;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,8 +11,8 @@ import java.util.List;
 
 @Setter
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ReqRes {
   private Integer codigoEstado;
   private String error;

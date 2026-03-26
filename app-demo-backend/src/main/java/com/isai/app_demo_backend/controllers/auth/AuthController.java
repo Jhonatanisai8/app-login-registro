@@ -20,6 +20,11 @@ public class AuthController {
     return ResponseEntity.ok(userManagementService.login(loginRequest));
   }
 
+  @RequestMapping(path = "/registrar", method = RequestMethod.POST)
+  public ResponseEntity<ReqRes> registrar(@RequestBody ReqRes registrarRequest) {
+    return ResponseEntity.ok(userManagementService.registrar(registrarRequest));
+  }
+
   @RequestMapping(path = "/refresh-token", method = RequestMethod.POST)
   public ResponseEntity<ReqRes> refreshToken(@RequestBody ReqRes refreshTokenRequest) {
     return ResponseEntity.ok(userManagementService.refreshToken(refreshTokenRequest));

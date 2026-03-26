@@ -32,7 +32,7 @@ public class UsuarioEntidad implements UserDetails {
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return List.of(new SimpleGrantedAuthority(rol));
+    return List.of(new SimpleGrantedAuthority("ROLE_" + rol));
   }
 
   @Override

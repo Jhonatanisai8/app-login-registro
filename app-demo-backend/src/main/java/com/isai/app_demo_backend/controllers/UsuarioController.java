@@ -14,22 +14,17 @@ import org.springframework.web.bind.annotation.*;
 public class UsuarioController {
   private final UserManagementService userManagementService;
 
-  @RequestMapping(method = RequestMethod.POST)
-  public ResponseEntity<ReqRes> registrar(@RequestBody ReqRes registrarRequest) {
-    return ResponseEntity.ok(userManagementService.registrar(registrarRequest));
-  }
-
   @RequestMapping(path = "/admin/usuarios", method = RequestMethod.GET)
   public ResponseEntity<ReqRes> obtenerUsuarios() {
     return ResponseEntity.ok(userManagementService.obtenerUsuarios());
   }
 
-  @RequestMapping(path = "/admin/usuarios{idUsuario}", method = RequestMethod.GET)
+  @RequestMapping(path = "/admin/usuarios/{idUsuario}", method = RequestMethod.GET)
   public ResponseEntity<ReqRes> obtenerUsuario(@PathVariable Long idUsuario) {
     return ResponseEntity.ok(userManagementService.obtenerUsuarioID(idUsuario));
   }
 
-  @RequestMapping(path = "/admin/usuarios{idUsuario}", method = RequestMethod.PUT)
+  @RequestMapping(path = "/admin/usuarios/{idUsuario}", method = RequestMethod.PUT)
   public ResponseEntity<ReqRes> actualizarUsuario(@PathVariable Long idUsuario, @RequestBody ReqRes actualizarUsuarioRequest) {
     return ResponseEntity.ok(userManagementService.actualizarUsuarioID(idUsuario, actualizarUsuarioRequest));
   }
